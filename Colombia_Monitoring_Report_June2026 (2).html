@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colombia — Security & Political Risk Monitoring</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3f4f6;
+    --surface: #ffffff;
+    --surface2: #f9fafb;
+    --border: #e5e7eb;
+    --border2: #d1d5db;
+    --text: #111827;
+    --text-sec: #374151;
+    --text-muted: #6b7280;
+    --text-faint: #9ca3af;
+    --high: #c0392b;
+    --high-bg: rgba(192,57,43,0.08);
+    --high-border: rgba(192,57,43,0.25);
+    --elev: #b5690a;
+    --elev-bg: rgba(181,105,10,0.08);
+    --elev-border: rgba(181,105,10,0.25);
+    --low: #1a6aad;
+    --low-bg: rgba(26,106,173,0.08);
+    --low-border: rgba(26,106,173,0.25);
+    --stable: #166534;
+    --stable-bg: rgba(22,101,52,0.08);
+    --stable-border: rgba(22,101,52,0.25);
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 13.5px;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 1.5rem 1rem 3rem;
+  }
+  .container { max-width: 1100px; margin: 0 auto; width: 100%; }
+
+  /* HEADER */
+  .header { border-bottom: 1px solid var(--border2); padding-bottom: 1.25rem; margin-bottom: 1.5rem; }
+  .dash-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .dash-subtitle { font-size: 12px; color: var(--text-muted); line-height: 1.7; }
+
+  /* BADGES */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 500;
+    padding: 3px 10px; border-radius: 999px;
+    white-space: nowrap;
+  }
+  .badge-high   { background: var(--high-bg);   color: var(--high);   border: 1px solid var(--high-border); }
+  .badge-elev   { background: var(--elev-bg);   color: var(--elev);   border: 1px solid var(--elev-border); }
+  .badge-low    { background: var(--low-bg);    color: var(--low);    border: 1px solid var(--low-border); }
+  .badge-stable { background: var(--stable-bg); color: var(--stable); border: 1px solid var(--stable-border); }
+  .badge-info   { background: var(--low-bg);    color: var(--low);    border: 1px solid var(--low-border); }
+
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .dot-high   { background: var(--high);   animation: pulse 2.2s ease-in-out infinite; }
+  .dot-elev   { background: var(--elev); }
+  .dot-low    { background: var(--low); }
+  .dot-stable { background: var(--stable); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.45} }
+
+  .trend { font-size: 12px; font-weight: 500; white-space: nowrap; }
+  .trend-det   { color: #a0382c; }
+  .trend-sdet  { color: #8a5a0a; }
+  .trend-nochg { color: var(--text-muted); }
+  .trend-imp   { color: var(--stable); }
+
+  /* SECTIONS */
+  .section { margin-bottom: 1.25rem; animation: fadeUp 0.35s ease both; }
+  .section:nth-child(1) { animation-delay: 0.00s; }
+  .section:nth-child(2) { animation-delay: 0.06s; }
+  .section:nth-child(3) { animation-delay: 0.12s; }
+  .section:nth-child(4) { animation-delay: 0.18s; }
+  .section:nth-child(5) { animation-delay: 0.22s; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:translateY(0); } }
+
+  .sec-label {
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; padding: 0 2px;
+  }
+
+  /* CARD */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+
+  /* KEY INSIGHTS */
+  .insights-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--high); border-radius: 6px;
+  }
+  .exec-table { width: 100%; border-collapse: collapse; }
+  .exec-table tr { border-bottom: 1px solid var(--border); }
+  .exec-table tr:last-child { border-bottom: none; }
+  .exec-table td { padding: 0.75rem 1.1rem; vertical-align: top; }
+  .exec-table td.exec-lbl {
+    width: 160px; font-weight: 600; color: var(--text-muted);
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+    white-space: nowrap; padding-top: 0.85rem;
+  }
+  .exec-table td.exec-content { font-size: 13px; color: var(--text-sec); line-height: 1.5; }
+  .exec-bullets { list-style: none; display: flex; flex-direction: column; gap: 4px; padding: 0; margin: 0; }
+  .exec-bullets li { padding-left: 12px; position: relative; line-height: 1.55; }
+  .exec-bullets li::before { content: "•"; position: absolute; left: 0; color: var(--text-muted); }
+
+  /* CITY GRID */
+  .city-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin-top: 8px; }
+  .city-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 5px; padding: 8px 10px; }
+  .city-name { font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 3px; display: flex; align-items: center; gap: 6px; }
+  .city-body { font-size: 11.5px; color: var(--text-sec); line-height: 1.5; }
+
+  /* INDICATOR TABLE */
+  .ind-table { width: 100%; border-collapse: collapse; }
+  .ind-table thead tr { background: var(--surface2); border-bottom: 1px solid var(--border2); }
+  .ind-table th {
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    text-align: left; padding: 8px 12px; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .ind-table td { padding: 11px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .ind-table tbody tr:last-child td { border-bottom: none; }
+  .ind-table tbody tr:hover { background: var(--surface2); }
+  .ind-name { font-weight: 500; font-size: 13px; color: var(--text); }
+  .ind-summary { font-size: 13px; color: var(--text-sec); line-height: 1.6; }
+
+  /* FLASHPOINTS */
+  .fp-list { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .fp-list-header { display: grid; grid-template-columns: 160px 110px 1fr; background: var(--surface2); border-bottom: 1px solid var(--border2); }
+  .fp-list-header div { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; padding: 8px 12px; }
+  .fp-row { display: grid; grid-template-columns: 160px 110px 1fr; border-bottom: 1px solid var(--border); }
+  .fp-row:last-child { border-bottom: none; }
+  .fp-row:hover { background: var(--surface2); }
+  .fp-cell { padding: 10px 12px; }
+  .fp-date { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.4; }
+  .fp-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .fp-body  { font-size: 12px; color: var(--text-sec); line-height: 1.6; }
+
+  /* CONFIDENCE */
+  .conf-inner { padding: 0.9rem 1.1rem; }
+  .conf-row { display: flex; align-items: center; gap: 10px; margin-bottom: 0.65rem; }
+  .conf-label { font-size: 12px; color: var(--text-muted); font-weight: 500; min-width: 130px; }
+  .conf-body { font-size: 13px; color: var(--text-sec); line-height: 1.65; }
+  .conf-body + .conf-body { margin-top: 0.5rem; }
+
+  hr.div { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+
+  .footer {
+    margin-top: 2rem; padding-top: 0.75rem; border-top: 1px solid var(--border);
+    font-size: 11px; color: var(--text-faint);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px;
+  }
+
+  @media (max-width: 600px) {
+    .ind-table thead { display: none; }
+    .ind-table td { display: block; padding: 6px 12px; }
+    .ind-table tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+    .ind-table tbody tr:last-child { border-bottom: none; }
+    .fp-grid { grid-template-columns: 1fr; }
+    .city-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="dash-title">Colombia — Presidential Election Run-off Monitoring</div>
+    <div class="dash-subtitle">
+      As of 16 June 2026 &nbsp;·&nbsp;
+      Sources: Seerist / Control Risks &nbsp;·&nbsp; S&amp;P Global / IHS Markit &nbsp;·&nbsp; Enquire.AI Expert Network
+    </div>
+  </div>
+
+  <!-- KEY INSIGHTS -->
+  <div class="section">
+    <div class="sec-label">Key Insights</div>
+    <div class="insights-card">
+      <table class="exec-table">
+        <tr>
+          <td class="exec-lbl">Current Situation</td>
+          <td class="exec-content">
+            <ul class="exec-bullets">
+              <li>De la Espriella leads the first round 43.7% vs 40.9% and is positioned for a narrow run-off win on 21 June; Petro has rejected the results, sustaining political tension through the certification window.</li>
+              <li>Armed group attacks are ongoing and concentrated in Cali and Cauca/Valle del Cauca — 40+ FARC-EMC incidents in recent weeks; civil unrest remains episodic; Bogotá and Medellín commercial operations are largely normal.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="exec-lbl">Key Implications</td>
+          <td class="exec-content">
+            <ul class="exec-bullets">
+              <li>Cali is the highest-risk city for operations — active FARC-EMC territorial campaign; Barranquilla faces criminal competition over its maritime narco-trafficking corridor with confirmed port union infiltration.</li>
+              <li>Bogotá risk is concentrated around symbolic and electoral targets; CBD disruption likely around election day and 7 August inauguration; Medellín criminal activity confined to marginalised areas.</li>
+              <li>Institutional collapse is not the base case — judiciary and military expected to contain any post-election dispute within legal channels.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="exec-lbl">Major Watchpoints</td>
+          <td class="exec-content">
+            <ul class="exec-bullets">
+              <li>Petro's rejection of first-round results sustains protest mobilisation risk through certification (~15 Jun) and beyond the run-off.</li>
+              <li>A de la Espriella win will trigger pre-emptive armed group attacks to test the incoming hardline security posture.</li>
+              <li>Monitor for drone-IED attacks expanding from rural conflict zones into urban centres, particularly Bogotá and Medellín.</li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <!-- INDICATOR SUMMARY -->
+  <div class="section">
+    <div class="sec-label">Indicator Summary</div>
+    <div class="card">
+      <table class="ind-table">
+        <thead>
+          <tr>
+            <th style="width:18%">Indicator</th>
+            <th style="width:11%">Status</th>
+            <th style="width:17%">Trend</th>
+            <th>Assessment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="ind-name">Transport &amp; Logistics</div></td>
+            <td><span class="badge badge-elev"><span class="dot dot-elev"></span>Elevated</span></td>
+            <td><span class="trend trend-det">↘ Deteriorating</span></td>
+            <td class="ind-summary">Armed strike risk from ELN, FARC-EMC, and Clan del Golfo targets road cargo across Antioquia, Arauca, Cauca, and Nariño; El Dorado and José María Córdova airports face confirmed drone-IED threat; Glencore's Cerrejon rail corridor sustained 15+ attacks in 2025.</td>
+          </tr>
+          <tr>
+            <td><div class="ind-name">Civil Unrest</div></td>
+            <td><span class="badge badge-elev"><span class="dot dot-elev"></span>Elevated</span></td>
+            <td><span class="trend trend-det">↘ Deteriorating</span></td>
+            <td class="ind-summary">Post-result protests are likely in Bogotá, Cali, and Valle del Cauca — assessed as episodic and geographically concentrated, not nationally paralysing; armed group infiltration of demonstrations is a confirmed risk; Bolivia-style systemic disruption is not the base case.</td>
+          </tr>
+          <tr>
+            <td><div class="ind-name">Regime Instability</div></td>
+            <td><span class="badge badge-stable"><span class="dot dot-stable"></span>Stable</span></td>
+            <td><span class="trend trend-nochg">→ No Change</span></td>
+            <td class="ind-summary">Colombia's Constitutional Court, armed forces, and separation of powers are expected to hold; Petro's fraud claims are being processed through legal mechanisms with no evidence of systemic irregularity; neither candidate commands a congressional majority, requiring centrist coalition-building regardless of outcome.</td>
+          </tr>
+          <tr>
+            <td><div class="ind-name">Terrorism</div></td>
+            <td><span class="badge badge-high"><span class="dot dot-high"></span>Critical</span></td>
+            <td><span class="trend trend-det">↘ Deteriorating</span></td>
+            <td class="ind-summary">FARC-EMC conducted 30+ attacks in Cauca and Valle del Cauca in April 2026 alone; ELN has returned to pipeline IED campaigns following peace talk collapse; drone-IED capability is expanding into peri-urban zones with fibre-optic guidance the government cannot currently counter.</td>
+          </tr>
+          <tr>
+            <td><div class="ind-name">Extortion Risk</div></td>
+            <td><span class="badge badge-elev"><span class="dot dot-elev"></span>Elevated</span></td>
+            <td><span class="trend trend-det">↘ Deteriorating</span></td>
+            <td class="ind-summary">Kidnapping surged to 396 cases Jan–Oct 2025, up 150% year-on-year; ELN has resumed abductions following peace talk collapse; armed groups maintain confirmed intelligence penetration of private security firms, logistics contractors, and port unions in Barranquilla and Cali.</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <!-- SCENARIOS -->
+  <div class="section">
+    <div class="sec-label">Scenarios</div>
+    <div class="card">
+      <table class="exec-table">
+        <tr>
+          <td class="exec-lbl">Base Case<br><span style="font-weight:400;color:var(--text-faint);font-size:10px;text-transform:none;letter-spacing:0">Most Likely</span></td>
+          <td class="exec-content">
+            <div style="font-weight:600;color:var(--text);margin-bottom:4px;">De la Espriella wins narrowly; legal mechanisms contain post-election dispute; disruption is episodic.</div>
+            <div style="color:var(--text-sec)"><span style="font-weight:600;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Operational Impact &nbsp;</span>Protests in Bogotá and Cali are short-lived and localised; 2–3 high-visibility armed group attacks around inauguration but no sustained urban campaign; extractive sector and logistics disruption continues at current tempo through Q3 2026.</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="exec-lbl">Downside<br><span style="font-weight:400;color:var(--text-faint);font-size:10px;text-transform:none;letter-spacing:0">Plausible</span></td>
+          <td class="exec-content">
+            <div style="font-weight:600;color:var(--text);margin-bottom:4px;">Petro actively mobilises supporters; protests converge with armed group activity; transition period turns volatile.</div>
+            <div style="color:var(--text-sec)"><span style="font-weight:600;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Operational Impact &nbsp;</span>Bogotá CBD faces repeated short-notice shutdowns; ELN pipeline attacks and EMC operations in Cauca/Valle del Cauca intensify; business continuity plans activated across Cali, Barranquilla, and Norte de Santander logistics corridors.</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="exec-lbl">Tail Risk<br><span style="font-weight:400;color:var(--text-faint);font-size:10px;text-transform:none;letter-spacing:0">Low Probability,<br>High Impact</span></td>
+          <td class="exec-content">
+            <div style="font-weight:600;color:var(--text);margin-bottom:4px;">Cepeda wins; Total Peace 2.0 emboldens ELN and EMC; security environment deteriorates over 12–18 months.</div>
+            <div style="color:var(--text-sec)"><span style="font-weight:600;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Operational Impact &nbsp;</span>Armed group territorial expansion accelerates; foreign investor confidence deteriorates sharply; MNC operating environments in Cali, Barranquilla, and extractive regions face material long-term degradation.</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <!-- FLASHPOINT DATES -->
+  <div class="section">
+    <div class="sec-label">Flashpoint Dates</div>
+    <div class="fp-list">
+      <div class="fp-list-header" style="grid-template-columns: 160px 1fr;">
+        <div>Date</div>
+        <div>Event &amp; Watch</div>
+      </div>
+      <div class="fp-row" style="grid-template-columns: 160px 1fr;">
+        <div class="fp-cell"><div class="fp-date">~15 Jun 2026</div></div>
+        <div class="fp-cell"><div class="fp-title">Official First-Round Certification</div><div class="fp-body">Petro's fraud narrative will peak at certification; monitor for mass mobilisation calls and information operations if de la Espriella's lead is confirmed.</div></div>
+      </div>
+      <div class="fp-row" style="grid-template-columns: 160px 1fr;">
+        <div class="fp-cell"><div class="fp-date">21 Jun 2026</div></div>
+        <div class="fp-cell"><div class="fp-title">Presidential Run-off — Election Day</div><div class="fp-body">Terrorist threat levels at 15-year highs consistent with first-round risk assessment [Seerist/Control Risks, 29 May 2026]; Cali and Cauca/Valle del Cauca face the highest terrorism exposure given the active FARC-EMC territorial campaign; Bogotá's risk is concentrated around symbolic and electoral targets rather than an active armed campaign, with El Dorado airport facing a confirmed drone-IED threat; midday–afternoon window carries peak exposure nationwide due to crowd density.</div></div>
+      </div>
+      <div class="fp-row" style="grid-template-columns: 160px 1fr;">
+        <div class="fp-cell"><div class="fp-date">22–28 Jun 2026</div></div>
+        <div class="fp-cell"><div class="fp-title">Post-Result Window</div><div class="fp-body">Highest civil unrest risk period; sustained protests expected in Bogotá and Cali if de la Espriella wins; monitor for roadblocks in Norte de Santander and Antioquia logistics corridors and armed group infiltration of protests.</div></div>
+      </div>
+      <div class="fp-row" style="grid-template-columns: 160px 1fr;">
+        <div class="fp-cell"><div class="fp-date">Jul–Aug 2026</div></div>
+        <div class="fp-cell"><div class="fp-title">Transition &amp; Policy Signalling</div><div class="fp-body">Hardline security posture signals by the new administration will trigger retaliatory ELN and EMC attacks; review site security and travel restrictions in Arauca, Cauca, and Nariño.</div></div>
+      </div>
+      <div class="fp-row" style="grid-template-columns: 160px 1fr;">
+        <div class="fp-cell"><div class="fp-date">7 Aug 2026</div></div>
+        <div class="fp-cell"><div class="fp-title">Presidential Inauguration</div><div class="fp-body">Key symbolic flashpoint for large-scale demonstrations and demonstrative armed group attacks; avoid executive travel to Colombia unless operationally essential; Bogotá CBD disruption risk is high.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <!-- CONFIDENCE -->
+  <div class="section">
+    <div class="sec-label">Confidence Assessment</div>
+    <div class="card">
+      <div class="conf-inner">
+        <div class="conf-row">
+          <span class="conf-label">Overall Confidence</span>
+          <span class="badge badge-info">Moderate–High</span>
+        </div>
+        <p class="conf-body">Security threat trajectory and electoral direction corroborated across Seerist/Control Risks, S&amp;P Global/IHS Markit, and two practitioner expert interviews (Omar Cortes — 30yr Colombia security practitioner; Michel Rowland García — Andean political scientist). GAO membership and kidnapping data sourced from Colombian Ministry of Defense primary data.</p>
+        <p class="conf-body">Key uncertainty: Petro's post-result behaviour — if he escalates from rhetoric to active mobilisation, protest severity could exceed the base case. Expert interviews pre-date the 31 May first-round result; a follow-on expert pulse post-runoff is recommended. Refresh within 48 hours of 21 June result or immediately upon any Petro mobilisation call or major armed incident.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>Colombia Security &amp; Political Risk Monitoring &nbsp;·&nbsp; As of 04 June 2026 &nbsp;·&nbsp; Valid through 07 August 2026</span>
+    <span>Internal Use Only</span>
+  </div>
+
+</div>
+</body>
+</html>
